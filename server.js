@@ -3,6 +3,7 @@ var express = require('express'),
   port = process.env.PORT || 3000,
   mongoose = require('mongoose'),
   Dificuldade = require('./api/models/dificuldadesModel'),
+  Ranking = require('./api/models/rankingModel'),
   bodyParser = require('body-parser');
   
   mongoose.Promise = global.Promise;
@@ -13,6 +14,7 @@ var express = require('express'),
   
   var routes = require('./api/routes/dificuldadesRoutes'); //importing route
   routes(app); //register the route
+
 
   app.listen(port);
 

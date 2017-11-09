@@ -29,8 +29,6 @@ exports.getDificuldade = function(req, res) {
 };
 
 exports.deleteDificuldade = function(req, res) {
-
-
   Dificuldade.remove({
     _id: req.params.dificuldadeId
   }, function(err, dificuldade) {
