@@ -1,9 +1,11 @@
 'use restrict';
-module.exports = function(app) {
-	var ranking = require('../controllers/rankingController');
+
+var express = require('express');
+var router = express.Router();
+var ranking = require('../controllers/rankingController');
 	
-	app.route('/ranking')
-		.get(ranking.getRanking)
-		.post(ranking.postRanking);
-		
-};
+	router.get('/ranking', ranking.getRanking);
+	router.post('/ranking', ranking.postRanking);
+
+
+module.exports = router;

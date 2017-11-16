@@ -1,9 +1,6 @@
 'use restrict';
 var express = require('express');
 var router = express.Router();
-
-//Routes
-
 var dificuldade = require('../controllers/dificuldadesController');
 	
 	router.get('/dificuldade',

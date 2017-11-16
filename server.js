@@ -13,7 +13,8 @@ var express = require('express'),
   app.use(bodyParser.json());
   
  //
-  app.use(require('./api/routes/dificuldadesRoutes')) //importing route
+  app.use(require('./api/routes/dificuldadesRoutes'));
+  app.use(require('./api/routes/rankingRoutes'));//importing route
   //routes(app); //register the route
 
 
