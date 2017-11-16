@@ -4,6 +4,6 @@ module.exports = function(app) {
 	
 	app.route('/ranking')
 		.get(ranking.getRanking)
-		.post(ranking.setRanking);
+		.post(ranking.postRanking);
 		
 };

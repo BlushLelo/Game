@@ -1,13 +1,19 @@
 'use restrict';
-module.exports = function(app) {
-	var dificuldade = require('../controllers/dificuldadesController');
+var express = require('express');
+var router = express.Router();
+
+//Routes
+
+var dificuldade = require('../controllers/dificuldadesController');
 	
-	app.route('/dificuldade')
-		.get(dificuldade.getDificuldades)
-		.post(dificuldade.createDificuldade);
+	router.get('/dificuldade',
+		dificuldade.getDificuldades);
+
+	router.post("/dificuldade", dificuldade.createDificuldade);
 		
-	app.route('/dificuldade/:dificuldadeId')
-		.get(dificuldade.getDificuldade)
-		//.put(dificuldade.updateDificuldade)
-		.delete(dificuldade.deleteDificuldade);	
-};
+	router.get('/dificuldade/:dificuldadeId',
+		dificuldade.getDificuldade);
+
+	router.delete('/dificuldade', dificuldade.deleteDificuldade);
+
+module.exports = router;

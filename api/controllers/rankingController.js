@@ -7,7 +7,7 @@ exports.getRanking = function(req, res) {
 	Ranking.find({}, function(err, ranking) {
 		if(err)
 			res.send(err);
-		res.json(dificuldade);
+		res.json(ranking);
 	});
 };
 
