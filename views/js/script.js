@@ -4,14 +4,123 @@ var cenario;
 var setVelocidade;
 var ranking;
 var arrayRanking=[];
+var listaUsuarios = [];
+var usuarioLogado = {
+	login: "",
+	password: ""
+};
 
+getDificuldade();
+getListaUsuarios();
+
+function login(tipo){
+	document.getElementById("btn-entrar").remove();
+	document.getElementById("btn-cadastrar").remove();
+
+	var username=document.createElement('input');
+	username.setAttribute("id", "username");
+	username.setAttribute("placeholder", "Username");
+
+	var senha=document.createElement('input');
+	senha.setAttribute("id", "senha");
+	senha.setAttribute("placeholder", "Senha");
+	senha.setAttribute("type", "password");
+
+	var logar=document.createElement('button');
+	logar.setAttribute("id", "logar");
+
+	var div = document.createElement('div');
+	div.setAttribute("id", "divInput");
+
+
+	document.getElementById("body").appendChild(div);
+	document.getElementById("divInput").appendChild(username);
+	document.getElementById("divInput").appendChild(senha);
+	document.getElementById("body").appendChild(logar);
+
+
+	document.getElementById("logar").innerHTML = tipo;
+
+	if (tipo == 'cadastrar') {
+			document.getElementById("logar").addEventListener("click", cadastrar);
+	} else{
+			document.getElementById("logar").addEventListener("click", entrar);
+	}
+
+}
+
+function cadastrar() {
+
+	var nome = document.getElementById("username");
+	var senha = document.getElementById("senha");
+	var flag = false;
+
+	if(nome.value == "" || senha.value == ""){
+		alert("Username e/ou Senha inválidos");
+
+	} else{
+			for(var i=0; i<listaUsuarios.length; i++){
+				if(listaUsuarios[i].login == nome.value){
+					flag = true;
+				}
+			}
+
+			if(flag){
+				alert("Este username já está sendo utilizado.");
+			} else {
+				usuarioLogado = {login: nome.value, password: senha.value};
+				cadastroNovoUsuario(nome.value, senha.value);
+				selecionarNivel();
+			}
+	}
+}
+
+function entrar() {
+	var nome = document.getElementById("username");
+	var senha = document.getElementById("senha");
+	var flag = false;
+
+	if(nome.value == "" || senha.value == ""){
+		alert("Username e/ou Senha inválidos");
+
+	} else{
+			for(var i=0; i<listaUsuarios.length; i++){
+				if(listaUsuarios[i].login == nome.value && listaUsuarios[i].password == senha.value){
+					flag = true;
+				}
+			}
+
+			if(flag){
+				usuarioLogado = {login: nome.value, password: senha.value};
+				selecionarNivel();
+			} else {
+				alert("Username e/ou Senha inválidos");
+			}
+	}
+
+}
+
+function getListaUsuarios() {
+	$.ajax({
+		url: "https://prezado0.herokuapp.com/registro",
+		dataType: 'json',
+		success: function (data){
+			listaUsuarios = data;
+		}
+	});
+}
+
+function cadastroNovoUsuario(nome, senha){
+
+	$.post("https://prezado0.herokuapp.com/registro",
+        {
+          login: nome,
+		  password: senha
+	  })
+
+}
 
 function getDificuldade() {
-	// $.get("http://localhost:3000/dificuldade", function(data, status){
-	// 	dificuldadeJogo = data;
-	// 	console.log(data);
-	// })
-
 	$.ajax({
 		//url: "http://localhost:3000/dificuldade",
 		url: "https://prezado0.herokuapp.com/dificuldade",
@@ -22,35 +131,26 @@ function getDificuldade() {
 	});
 }
 
-getDificuldade();
-
 function setDificuldade() {
-	var nome = document.getElementById("nome");
 
-	if(nome.value == ""){
-		alert("Por favor, insira seu nome");
-
-	} else{
-			for(var i=0; i<dificuldadeJogo.length; i++){
-				if(dificuldadeJogo[i].dificuldade === this.id){
-					 cenario = "img/" + dificuldadeJogo[i].cenario;
-					 setVelocidade =  dificuldadeJogo[i].velocidade;
-				}
-			}
-
-			iniciarJogo();
+	for(var i=0; i<dificuldadeJogo.length; i++){
+		if(dificuldadeJogo[i].dificuldade === this.id){
+			 cenario = "img/" + dificuldadeJogo[i].cenario;
+			 setVelocidade =  dificuldadeJogo[i].velocidade;
+		}
 	}
 
+	// escolherPersonagem();
+	iniciarJogo();
 
 }
 
-function atualizarRanking(nome, pontuacao){
+function atualizarRanking(pontuacao){
 	var ranking;
 
-	//$.post("http://localhost:3000/ranking",
 	$.post("https://prezado0.herokuapp.com/ranking",
         {
-          name: nome,
+          name: usuarioLogado.login,
 		  score: pontuacao
 	  })
 
@@ -87,11 +187,10 @@ function verRanking(){
 
 }
 
-
-
-
 function selecionarNivel() {
-	document.getElementById("jogar").remove();
+	document.getElementById("username").remove();
+	document.getElementById("senha").remove();
+	document.getElementById("logar").remove();
 
 	facil=document.createElement('button');
 	facil.setAttribute("id", "facil");
@@ -102,14 +201,6 @@ function selecionarNivel() {
 	dificil=document.createElement('button');
 	dificil.setAttribute("id", "dificil");
 
-	nome = document.createElement('input');
-	nome.setAttribute("id", "nome");
-
-	div = document.createElement('div');
-	div.setAttribute("id", "divInput");
-
-	document.getElementById("body").appendChild(div);
-	document.getElementById("divInput").appendChild(nome);
 	document.getElementById("body").appendChild(facil);
 	document.getElementById("body").appendChild(medio);
 	document.getElementById("body").appendChild(dificil);
@@ -118,13 +209,11 @@ function selecionarNivel() {
 	document.getElementById("facil").innerHTML = "Fácil";
 	document.getElementById("medio").innerHTML = "Médio";
 	document.getElementById("dificil").innerHTML = "Difícil";
-	document.getElementById("nome").placeholder = "Digite seu nome";
 
 
 	document.getElementById("facil").addEventListener("click", setDificuldade);
 	document.getElementById("medio").addEventListener("click", setDificuldade);
 	document.getElementById("dificil").addEventListener("click", setDificuldade);
-
 
 }
 
@@ -135,11 +224,6 @@ function iniciarJogo() {
 	document.getElementById("facil").remove();
 	document.getElementById("medio").remove();
 	document.getElementById("dificil").remove();
-	var nome = document.getElementById("nome");
-	var nomeValor = nome.value;
-	document.getElementById("divInput").remove();
-
-	console.log(nomeValor);
 
 	// Criando o canvas
 	var canvas = document.createElement("canvas");
@@ -174,14 +258,6 @@ function iniciarJogo() {
 	};
 	cervejaImage.src = "img/cerveja.png";
 
-	// // Bala
-	// var balaReady = false;
-	// var balaImage = new Image();
-	// balaImage.onload = function () {
-	// 	balaReady = true;
-	// };
-	// balaImage.src = "img/bala.png";
-
 	// DP
 	var dpReady = false;
 	var dpImage = new Image();
@@ -192,7 +268,7 @@ function iniciarJogo() {
 
 	// DECLARACAO DE VARIÁVEIS E OBJETOS
 	var estudante = {
-		velocidade: setVelocidade //pixels por segundo
+		velocidade: setVelocidade
 	};
 
 	if (setVelocidade == 256) {
@@ -243,22 +319,9 @@ function iniciarJogo() {
 		// Cria a cerveja em um lugar aleatorio
 	    cerveja.x = 32 + (Math.random() * (canvas.width - 64));
 		cerveja.y = canvas.height - 480;
-
-		// Cria a bala em um lugar aleatorio
-		// if (flagCrazy == 0) {
-		// 	crazy = Math.random();
-		// 	console.log(crazy);
-		// 	if(crazy > 0.8){
-		// 		bala.x = 32 + (Math.random() * (canvas.width - 64));
-		// 		bala.y = canvas.height - 470;
-		// 	}
-		// }
-
-
 	};
 
 	setInterval(function(){ dp.y = dp.y+1}, velocidadeJogo);
-	// setInterval(function(){ bala.y = bala.y+1}, velocidadeJogo);
 	setInterval(function(){ cerveja.y = cerveja.y+1}, velocidadeJogo);
 
 
@@ -274,45 +337,6 @@ function iniciarJogo() {
 
 
 		//VERIFICAR SE PEGOU ALGUM DOS ITENS
-		// if ( estudante.x <= (bala.x + 32) && bala.x <= (estudante.x + 32) && estudante.y <= (bala.y + 32) && bala.y <= (estudante.y + 32)) {
-        //
-		// 	var cores = ["#b100ba", "#9900b0", "#8000b3", "#5600b8", "#2c00bd", "#7b00c2", "#b500af", "#b100ba", "#9900b0", "#8000b3"];
-		// 	var bkg = ["img/bkg4.jpg", "img/bkg1.jpg"];
-		// 	var i=0;
-		// 	var j=0;
-		// 	reset();
-	    //     bgImage.src = "img/bkg4.jpg";
-	    //     estudanteImage.src = "img/estudante2.png";
-		// 	estudante.velocidade = 1000;
-		// 	velocidadeJogo = 2;
-		// 	flagCrazy = 1;
-		// 	var myVar = setInterval(function() {
-		// 	      document.body.style.backgroundColor = cores[i];
-        //
-		// 		  bgImage.src = bkg[j];
-		// 	      i++;
-		// 		  j++;
-		// 	      if (i == cores.length) {
-		// 	        i =  0;
-		// 	      }
-		// 	      if (j == bkg.length) {
-		// 	        j =  0;
-		// 	      }
-        //
-		// 	}, 100);
-        //
-        //
-        //
-		// 	setInterval(function(){
-		// 		clearInterval(myVar);
-		// 		bgImage.src = "img/bkg1.jpg";
-		//         estudanteImage.src = "img/estudante3.png";
-		// 		document.body.style.backgroundColor = "#003aad";
-		// 		estudante.velocidade = setVelocidade;
-		// 		flagCrazy = 0;
-		// 	}, 5000);
-		// }
-
 		if ( estudante.x <= (cerveja.x + 32) && cerveja.x <= (estudante.x + 32) && estudante.y <= (cerveja.y + 32) && cerveja.y <= (estudante.y + 32)) {
 
 			pontuacao++;
@@ -345,8 +369,8 @@ function iniciarJogo() {
 		var jubilou = document.createElement('h2');
 		jubilou.setAttribute("id", "jubilou");
 		document.getElementById("body").appendChild(jubilou);
-		document.getElementById("jubilou").innerHTML = nomeValor + " você JUBILOU! <br> Sua pontuação foi: "+pontuacao;
-		atualizarRanking(nomeValor, pontuacao);
+		document.getElementById("jubilou").innerHTML = usuarioLogado.login + " você JUBILOU! <br> Sua pontuação foi: "+pontuacao;
+		atualizarRanking(pontuacao);
 	}
 
 	// DESENHAR OBJETOS NO CANVAS

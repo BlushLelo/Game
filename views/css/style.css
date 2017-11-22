@@ -22,7 +22,7 @@ canvas{
 
 button{
     width: 15%;
-    height: 10vh;
+    height: 12vh;
     border: 5px solid black;
     border-radius: 30px;
     background-color: #e05c0f;
@@ -50,7 +50,9 @@ button:focus{
 #divInput{
     width: 100%;
     display: block;
-    margin-bottom: 5%;
+    text-align: center;
+    /*position: absolute;*/
+    padding: 0 35%;
 }
 
 input{
@@ -58,6 +60,9 @@ input{
     height: 50px;
     text-align: center;
     font-size: 1.5em;
+    display: block;
+    /*position: relative;*/
+    margin-bottom: 1%;
 }
 
 ul {
@@ -74,5 +79,6 @@ ul {
 @media only screen and (max-width: 720px) {
     button {
         font-size: 1em;
+        width: 25%;
     }
 }
