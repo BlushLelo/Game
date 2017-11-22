@@ -9,9 +9,13 @@ var usuarioLogado = {
 	login: "",
 	password: ""
 };
+var personagem;
+var listaPersonagens = [];
+
 
 getDificuldade();
 getListaUsuarios();
+getPersonagens();
 
 function login(tipo){
 	document.getElementById("btn-entrar").remove();
@@ -140,9 +144,31 @@ function setDificuldade() {
 		}
 	}
 
-	// escolherPersonagem();
-	iniciarJogo();
+	escolherPersonagem();
 
+}
+
+function getPersonagens() {
+	$.ajax({
+		url: "https://prezado0.herokuapp.com/character",
+		dataType: 'json',
+		success: function (data){
+			listaPersonagens = data;
+		}
+	});
+}
+
+function setPersonagem() {
+
+	for(var i=0; i<listaPersonagens.length; i++){
+		if(listaPersonagens[i].personagem === this.id){
+			console.log(this.id);
+			 personagem = "img/" + listaPersonagens[i].img;
+			 console.log(personagem);
+		}
+	}
+
+	iniciarJogo();
 }
 
 function atualizarRanking(pontuacao){
@@ -217,13 +243,55 @@ function selecionarNivel() {
 
 }
 
-
-
-function iniciarJogo() {
-	document.getElementById("menu").remove();
+function escolherPersonagem() {
 	document.getElementById("facil").remove();
 	document.getElementById("medio").remove();
 	document.getElementById("dificil").remove();
+
+	var faceca=document.createElement('img');
+	faceca.setAttribute("id", "faceca");
+	faceca.setAttribute("src", "img/faceca.png");
+	faceca.setAttribute("class", "escolher-personagem");
+
+	var lep=document.createElement('img');
+	lep.setAttribute("id", "lep");
+	lep.setAttribute("src", "img/lep.png");
+	lep.setAttribute("class", "escolher-personagem");
+
+	var comunica=document.createElement('img');
+	comunica.setAttribute("id", "comunica");
+	comunica.setAttribute("src", "img/comunica.png");
+	comunica.setAttribute("class", "escolher-personagem");
+
+
+
+	document.getElementById("body").appendChild(faceca);
+	document.getElementById("body").appendChild(lep);
+	document.getElementById("body").appendChild(comunica);
+
+
+	document.getElementById("faceca").addEventListener("click", setPersonagem);
+	document.getElementById("lep").addEventListener("click", setPersonagem);
+	document.getElementById("comunica").addEventListener("click", setPersonagem);
+}
+
+function iniciarJogo() {
+	document.getElementById("faceca").remove();
+	document.getElementById("lep").remove();
+	document.getElementById("comunica").remove();
+	document.getElementById("menu").remove();
+
+	var cerveja = {};
+	var dp = {};
+	var dp1 = {};
+	var dp2 = {};
+	var dp3 = {};
+	var dp4 = {};
+	var dp5 = {};
+	var dp6 = {};
+	var pontuacao = 0;
+	var vidas = 3;
+
 
 	// Criando o canvas
 	var canvas = document.createElement("canvas");
@@ -248,7 +316,7 @@ function iniciarJogo() {
 	estudanteImage.onload = function () {
 		estudanteReady = true;
 	};
-	estudanteImage.src = "img/estudante3.png";
+	estudanteImage.src = personagem;
 
 	// Cerveja
 	var cervejaReady = false;
@@ -266,6 +334,50 @@ function iniciarJogo() {
 	};
 	dpImage.src = "img/dp.png";
 
+	var dp1Ready = false;
+	var dp1Image = new Image();
+	 	dp1Image.onload = function () {
+	 	dp1Ready = true;
+	};
+	dp1Image.src = "img/dp.png";
+
+	var dp2Ready = false;
+	var dp2Image = new Image();
+	 	dp2Image.onload = function () {
+	 	dp2Ready = true;
+	};
+	dp2Image.src = "img/dp.png";
+
+	var dp3Ready = false;
+	var dp3Image = new Image();
+		dp3Image.onload = function () {
+		dp3Ready = true;
+	};
+	dp3Image.src = "img/dp.png";
+
+	var dp4Ready = false;
+	var dp4Image = new Image();
+		dp4Image.onload = function () {
+		dp4Ready = true;
+	};
+	dp4Image.src = "img/dp.png";
+
+	var dp5Ready = false;
+	var dp5Image = new Image();
+		dp5Image.onload = function () {
+		dp5Ready = true;
+	};
+	dp5Image.src = "img/dp.png";
+
+	var dp6Ready = false;
+	var dp6Image = new Image();
+		dp6Image.onload = function () {
+		dp6Ready = true;
+	};
+	dp6Image.src = "img/dp.png";
+
+
+
 	// DECLARACAO DE VARIÁVEIS E OBJETOS
 	var estudante = {
 		velocidade: setVelocidade
@@ -278,15 +390,6 @@ function iniciarJogo() {
 	} else {
 		var velocidadeJogo = 0.0001;
 	}
-
-
-	var crazy;
-	var cerveja = {};
-	var bala = {};
-	var dp = {};
-	var pontuacao = 0;
-	var vidas = 3;
-	var flagCrazy = 0;
 
 	// Controle do teclado
 	var keysDown = {};
@@ -315,6 +418,23 @@ function iniciarJogo() {
 		dp.x = 32 + (Math.random() * (canvas.width - 64));
 		dp.y = canvas.height - 480;
 
+		dp1.x = 32 + (Math.random() * (canvas.width - 64));
+		dp1.y = canvas.height - 480;
+
+		dp2.x = 32 + (Math.random() * (canvas.width - 64));
+		dp2.y = canvas.height - 480;
+
+		dp3.x = 32 + (Math.random() * (canvas.width - 64));
+		dp3.y = canvas.height - 480;
+
+		dp4.x = 32 + (Math.random() * (canvas.width - 64));
+		dp4.y = canvas.height - 480;
+
+		dp5.x = 32 + (Math.random() * (canvas.width - 64));
+		dp5.y = canvas.height - 480;
+
+		dp6.x = 32 + (Math.random() * (canvas.width - 64));
+		dp6.y = canvas.height - 480;
 
 		// Cria a cerveja em um lugar aleatorio
 	    cerveja.x = 32 + (Math.random() * (canvas.width - 64));
@@ -322,6 +442,12 @@ function iniciarJogo() {
 	};
 
 	setInterval(function(){ dp.y = dp.y+1}, velocidadeJogo);
+	setInterval(function(){ dp1.y = dp1.y+1}, velocidadeJogo);
+	setInterval(function(){ dp2.y = dp2.y+1}, velocidadeJogo);
+	setInterval(function(){ dp3.y = dp3.y+1}, velocidadeJogo);
+	setInterval(function(){ dp4.y = dp4.y+1}, velocidadeJogo);
+	setInterval(function(){ dp5.y = dp5.y+1}, velocidadeJogo);
+	setInterval(function(){ dp6.y = dp6.y+1}, velocidadeJogo);
 	setInterval(function(){ cerveja.y = cerveja.y+1}, velocidadeJogo);
 
 
@@ -354,7 +480,74 @@ function iniciarJogo() {
 
 		}
 
-		if(cerveja.y >= canvas.height || dp.y >= canvas.height){
+		if ( estudante.x <= (dp1.x + 32) && dp1.x <= (estudante.x + 32) && estudante.y <= (dp1.y + 32) && dp1.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if ( estudante.x <= (dp2.x + 32) && dp2.x <= (estudante.x + 32) && estudante.y <= (dp2.y + 32) && dp2.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if ( estudante.x <= (dp3.x + 32) && dp3.x <= (estudante.x + 32) && estudante.y <= (dp3.y + 32) && dp3.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if ( estudante.x <= (dp4.x + 32) && dp4.x <= (estudante.x + 32) && estudante.y <= (dp4.y + 32) && dp4.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if ( estudante.x <= (dp5.x + 32) && dp5.x <= (estudante.x + 32) && estudante.y <= (dp5.y + 32) && dp5.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if ( estudante.x <= (dp6.x + 32) && dp6.x <= (estudante.x + 32) && estudante.y <= (dp6.y + 32) && dp6.y <= (estudante.y + 32)) {
+			if(vidas == 1){
+				acabou();
+			} else{
+				vidas--;
+				reset();
+			}
+
+		}
+
+		if(cerveja.y >= canvas.height
+			|| dp.y >= canvas.height
+			|| dp1.y >= canvas.height
+			|| dp2.y >= canvas.height
+			|| dp3.y >= canvas.height
+			|| dp4.y >= canvas.height
+			|| dp5.y >= canvas.height
+			|| dp6.y >= canvas.height){
 			if(vidas == 1){
 				acabou();
 			} else{
@@ -382,28 +575,39 @@ function iniciarJogo() {
 
 		if (estudanteReady) {
 			ctx.drawImage(estudanteImage, estudante.x, estudante.y);
-
 		}
 
 		if (dpReady) {
-
 			ctx.drawImage(dpImage, dp.x, dp.y);
+		}
 
+		if (dp1Ready) {
+			ctx.drawImage(dp1Image, dp1.x, dp1.y);
+		}
+
+		if (dp2Ready) {
+			ctx.drawImage(dp2Image, dp2.x, dp2.y);
+		}
+
+		if (dp3Ready) {
+			ctx.drawImage(dp3Image, dp3.x, dp3.y);
+		}
+
+		if (dp4Ready) {
+			ctx.drawImage(dp4Image, dp4.x, dp4.y);
+		}
+
+		if (dp5Ready) {
+			ctx.drawImage(dp5Image, dp5.x, dp5.y);
+		}
+
+		if (dp6Ready) {
+			ctx.drawImage(dp6Image, dp6.x, dp6.y);
 		}
 
 		if (cervejaReady) {
-
 			ctx.drawImage(cervejaImage, cerveja.x, cerveja.y);
-
 		}
-
-		// if (balaReady) {
-		// 	if ( crazy > 0.8){
-		// 	ctx.drawImage(balaImage, bala.x, bala.y);
-		// 	}
-		// }
-
-
 
 		// Score
 		ctx.fillStyle = "rgb(0, 0, 0)";
