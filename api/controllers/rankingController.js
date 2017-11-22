@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 Ranking = mongoose.model('Ranking');
 
 exports.getRanking = function(req, res) {
-	Ranking.find({}, function(err, ranking) {
+	Ranking.find({}).sort({score: -1}).exec( function(err, ranking) {
 		if(err)
 			res.send(err);
 		res.json(ranking);
