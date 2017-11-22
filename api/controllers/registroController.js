@@ -19,6 +19,10 @@ exports.registrar = function(req, res) {
                 });
             }
             }else
-                res.send(err);
+                novoRegistro.save(function(err, register) {
+                    if (err)
+                        res.send(err);
+                    res.json(register);
+                });
     });
 };
