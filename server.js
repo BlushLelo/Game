@@ -8,7 +8,7 @@ var express = require('express'),
   bodyParser = require('body-parser');
   
   mongoose.Promise = global.Promise;
-  mongoose.connect('mongodb://localhost/Topicos');
+  mongoose.connect('mongodb://admin:admin@ds064198.mlab.com:64198/prezado0');
   
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
