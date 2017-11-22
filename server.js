@@ -18,6 +18,7 @@ var express = require('express'),
   app.use(require('./api/routes/dificuldadesRoutes'));
   app.use(require('./api/routes/rankingRoutes'));//importing route
   app.use(require('./api/routes/registroRoutes'));
+  app.use(require('./api/routes/loginRoutes'));
   //routes(app); //register the route
   app.use(express.static(path.join(__dirname, 'views')));
 
