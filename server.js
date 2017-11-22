@@ -4,6 +4,7 @@ var express = require('express'),
   mongoose = require('mongoose'),
   Dificuldade = require('./api/models/dificuldadesModel'),
   Ranking = require('./api/models/rankingModel'),
+  path = require('path'),
   bodyParser = require('body-parser');
   
   mongoose.Promise = global.Promise;
@@ -16,7 +17,7 @@ var express = require('express'),
   app.use(require('./api/routes/dificuldadesRoutes'));
   app.use(require('./api/routes/rankingRoutes'));//importing route
   //routes(app); //register the route
-
+  app.use(express.static(path.join(__dirname, 'views')));
 
   app.listen(port);
 
