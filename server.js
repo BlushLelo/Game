@@ -5,6 +5,7 @@ var express = require('express'),
   Dificuldade = require('./api/models/dificuldadesModel'),
   Ranking = require('./api/models/rankingModel'),
   Registro = require('./api/models/registroModel'),
+  Character = require('./api/models/characterModel'),
   path = require('path'),
   bodyParser = require('body-parser');
   
@@ -19,6 +20,7 @@ var express = require('express'),
   app.use(require('./api/routes/rankingRoutes'));//importing route
   app.use(require('./api/routes/registroRoutes'));
   app.use(require('./api/routes/loginRoutes'));
+  app.use(require('./api/routes/characterRoutes'));
   //routes(app); //register the route
   app.use(express.static(path.join(__dirname, 'views')));
 
