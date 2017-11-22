@@ -13,7 +13,8 @@ function getDificuldade() {
 	// })
 
 	$.ajax({
-		url: "http://localhost:3000/dificuldade",
+		//url: "http://localhost:3000/dificuldade",
+		url: "https://prezado0.herokuapp.com/dificuldade",
 		dataType: 'json',
 		success: function (data){
 			dificuldadeJogo = data;
@@ -46,7 +47,8 @@ function setDificuldade() {
 function atualizarRanking(nome, pontuacao){
 	var ranking;
 
-	$.post("http://localhost:3000/ranking",
+	//$.post("http://localhost:3000/ranking",
+	$.post("https://prezado0.herokuapp.com/ranking",
         {
           name: nome,
 		  score: pontuacao
@@ -63,7 +65,8 @@ function atualizarRanking(nome, pontuacao){
 function verRanking(){
 
 
-	$.get("http://localhost:3000/ranking", function(data, status){
+	//$.get("http://localhost:3000/ranking", function(data, status){
+	$.get("https://prezado0.herokuapp.com/ranking", function(data, status){
 		ranking = data;
 		var listaRanking = document.createElement('ul');
 		listaRanking.setAttribute("id", "listaRanking");
