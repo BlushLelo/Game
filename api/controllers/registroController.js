@@ -10,13 +10,15 @@ exports.registrar = function(req, res) {
         if (err)
             res.send(err);
         else
+            if(registro) {
             if (novoRegistro.login !== registro.login){
                 novoRegistro.save(function(err, register) {
                     if (err)
                         res.send(err);
                     res.json(register);
                 });
-            } else
+            }
+            }else
                 res.send(err);
     });
 };
