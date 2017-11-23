@@ -124,6 +124,24 @@ function cadastroNovoUsuario(nome, senha){
 
 }
 
+function cadastroSala(){
+	var login = document.getElementById('login');
+	var password = document.getElementById('password');
+
+	if (login.value !== '' && password.value !==''){
+	$.post("https://gameprezado0.herokuapp.com/registro",
+        {
+          login: login.value,
+		  password: password.value
+	  });
+
+		alert("Cadastro efetuado com sucesso")
+	} else {
+		alert("campos vazios");
+	}
+
+}
+
 function getDificuldade() {
 	$.ajax({
 		//url: "http://localhost:3000/dificuldade",
